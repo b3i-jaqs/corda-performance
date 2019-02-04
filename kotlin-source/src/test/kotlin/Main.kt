@@ -10,7 +10,6 @@ import net.corda.core.utilities.loggerFor
 import java.time.Duration
 import java.time.Instant
 import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
 import org.slf4j.Logger
 import java.util.concurrent.Future
 
@@ -47,13 +46,13 @@ fun main(args: Array<String>) {
         states
     }
 
-    val provider2 = {
+    val provider2 = { doSleep: Boolean ->
         val criteria2 = QueryCriteria.LinearStateQueryCriteria(
             status = Vault.StateStatus.UNCONSUMED
             , uuid = emptyList()
         )
         val before = Instant.now()
-        Thread.sleep(2000)
+        if (doSleep) Thread.sleep(2000)
         logger.info("Start 2")
         val states = proxy.vaultQueryByWithPagingSpec(
             contractStateType = IOUState::class.java,
@@ -62,29 +61,23 @@ fun main(args: Array<String>) {
         )
         val after = Instant.now()
         val duration = Duration.between(before, after)
-        logger.info("[provider2] Retrieving ${states.states.size} records took $duration")
+        logger.info("[provider2($doSleep)] Retrieving ${states.states.size} records took $duration")
         states
     }
 
-    val executor = Executors.newFixedThreadPool(10)
+    val executor = Executors.newFixedThreadPool(20)
 
     val futures = mutableListOf<Future<*>>()
-    for(i in 1..9) {
+    for(i in 1..10) {
+        val doSleep = i.rem(2) == 0
+        futures.add(executor.submit {provider2(doSleep)})
         futures.add(executor.submit(provider1))
     }
-    val future2 = executor.submit(provider2)
+
     futures.forEach { it.get() }
 
-//    val future1 = executor.submit(provider1)
-//    val result1 = future1.get()
-    val result2 = future2.get()
-
-
-
-//    executor.awaitTermination(20, TimeUnit.SECONDS)
     executor.shutdown()
-
-//    val states = provider()
 
     conn.close()
 }
+
