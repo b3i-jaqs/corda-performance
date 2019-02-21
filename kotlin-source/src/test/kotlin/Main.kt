@@ -42,7 +42,7 @@ fun main(args: Array<String>) {
         )
         val after = Instant.now()
         val duration = Duration.between(before, after)
-        logger.trace("[provider1] Retrieving ${states.states.size} records took $duration")
+        logger.info("[provider1] Retrieving ${states.states.size} records took $duration")
         states
     }
 

@@ -1,5 +1,12 @@
 # Demonstration of Corda performance issue
 
+Configure access to a Corda Enterprise repository by setting the following Gradle properties:
+
+* repo_enterprise_url=
+* repo_enterprise_username=
+* repo_enterprise_password=
+
+
 Start the Corda nodes by running from the root directory:
 
 ```bash
