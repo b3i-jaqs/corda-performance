@@ -1,4 +1,8 @@
 
+.idea/
+kotlin-source/out/
+*.iml
+
 .gradle/
 build/
 logs/
