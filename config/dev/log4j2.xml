@@ -46,11 +46,15 @@
     </Appenders>
 
     <Loggers>
-        <Root level="trace">
+        <Root level="info">
             <AppenderRef ref="Console-Appender"/>
             <AppenderRef ref="RollingFile-Appender"/>
         </Root>
-        <Logger name="net.corda" level="trace" additivity="false">
+        <Logger name="net.corda" level="warn" additivity="false">
+            <AppenderRef ref="Console-Appender"/>
+            <AppenderRef ref="RollingFile-Appender"/>
+        </Logger>
+        <Logger name="org.hibernate.SQL" level="debug" additivity="false">
             <AppenderRef ref="Console-Appender"/>
             <AppenderRef ref="RollingFile-Appender"/>
         </Logger>

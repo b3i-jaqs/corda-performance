@@ -85,3 +85,20 @@ The results are not as expected, with a 2 of the fast running threads being able
 Also, the threads that should have taken 2 seconds took all about 11 seconds. This suggests that they where all waiting for other threads to end their run before they could complete their own run.
 
 All this makes it seem like there is some undesired queueing going on.
+
+# The SQL test
+
+To check the SQL directly the kotlin-source/src/test/kotlin/MainSQL class can be used.
+
+This class requires the H2 persistence file to be provided as its unique argument:
+
+```
+/users/some_user/h2/persistence
+```
+
+Note that this class makes an effort to:
+
+* Pre-heat the data source connections
+* Do something meaningful when data exists (it is written to a file)
+
+Notice that executing this class in different ways does not reproduce the same behavior as above.
